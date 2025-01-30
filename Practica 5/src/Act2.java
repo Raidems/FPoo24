@@ -9,8 +9,8 @@ public class Act2 {
         sc.close();
 
         for (int i = num; i >=0; i--) {
-            if(i<num)System.out.println(",");
-            System.out.println(i);
+            if(i<num)System.out.print(", ");
+            System.out.print(i);
         }
     }
 }

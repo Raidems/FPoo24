@@ -10,7 +10,7 @@ public class Main {
         boolean primero = true;
         for (int i = 1; i <= num; i +=2) {
             if (!primero){
-                System.out.println(",");
+                System.out.print(", ");
             }
             System.out.print(i);
             primero = false;
