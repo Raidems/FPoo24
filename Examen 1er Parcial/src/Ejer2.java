@@ -4,26 +4,19 @@ public class Ejer2 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Ingrese un numero: ");
+        System.out.println("Ingresa un Numero entero: ");
         int num = sc.nextInt();
 
-        int par, impar, rs;
-
-        for (int i = 0; i < num; i++) {
-            if (i % 2 == 0) {
-                par = i;
+        do{
+            for (int i = 1; i <= num; i++){
+                if (i % 2 == 0){
+                    int par = i / 2;
+                    System.out.println(par);
+                } else if (i % 2 == 1) {
+                    int impar = i / 2;
+                    System.out.println(impar);
+                }
             }
-            else {
-                impar = i;
-            }
-        }
-
-        if (num % 2 == 0) {
-            par = num / 2;
-            System.out.println(par);
-        } else if (num % 3 == 0) {
-            impar = (num * 3) + 1;
-            System.out.println(impar);
-        }
+        }while(num != 1);
     }
 }
