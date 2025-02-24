@@ -4,32 +4,25 @@ public class Main {
     public static void main(String[] args) {
 
         //crear el objeto o instanciarlo es lo mismo.
-        Spartan jefeMaestro = new Spartan();
-        Spartan reach = new Spartan();
-
-        // Asignamos los atributos a los objetos.
-        jefeMaestro.nombre = "John 117 ";
-        jefeMaestro.salud = 100;
-        jefeMaestro.escudo = 90;
-        jefeMaestro.armaPrincipal = "Rifle de asalto ";
+        Spartan jefeMaestro = new Spartan("John 117 ", 100, 90, "Rifle de asalto ");
+        Spartan reach = new Spartan("Jorge ", 0, 0, "Espada ");
 
         // usar los Métodos
-
         jefeMaestro.mostrarInfo();
         jefeMaestro.atacar("Elite ");
         jefeMaestro.RecargarArma(65);
         jefeMaestro.correr(true);
 
-        //Nueva declaración
-        reach.nombre = "Jorge ";
-        reach.salud = 0;
-        reach.escudo = 0;
-        reach.armaPrincipal = "Espada ";
-
+        //Usar los métodos
         reach.mostrarInfo();
-        reach.atacar("Ataco a Chavo ");
+        reach.atacar("Chavo ");
         reach.RecargarArma(2);
         reach.correr(false);
+
+        // ejemplo de get & set cpn el objeto JefeMaestro
+        jefeMaestro.setNombre("JuantinoPro03");
+        jefeMaestro.mostrarInfo();
+        System.out.println(jefeMaestro.getNombre());
 
     }
 }// llave de la clase
