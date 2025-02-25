@@ -26,13 +26,13 @@ public class Main {
             }
         }
 
-        password.logitud = length;
+        password.setLogitud(length);
 
         int includemayuscula = JOptionPane.showConfirmDialog(null, "¿Desea incluir mayúsculas?", "Opciones", JOptionPane.YES_NO_OPTION);
-        password.mayuscula = (includemayuscula == JOptionPane.YES_OPTION);
+        password.setMayuscula(includemayuscula == JOptionPane.YES_OPTION);
 
         int includeEspeciales = JOptionPane.showConfirmDialog(null, "¿Desea incluir caracteres especiales?", "Opciones", JOptionPane.YES_NO_OPTION);
-        password.especial = (includeEspeciales == JOptionPane.YES_OPTION);
+        password.setEspecial(includeEspeciales == JOptionPane.YES_OPTION);
 
         String generatedPassword = password.generarPassword();
 

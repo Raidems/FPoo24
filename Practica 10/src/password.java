@@ -1,9 +1,17 @@
 import java.util.Random;
 
 public class password {
-    public int logitud = 8;
-    boolean mayuscula;
-    boolean especial;
+
+    //Creación del constructor
+    public password() {
+        this.logitud = 8;
+        this.mayuscula = false;
+        this.especial = false;
+    }
+
+    private int logitud = 8;
+    private boolean mayuscula;
+    private boolean especial;
 
     public String generarPassword() {
         String letras = "abcdefghijklmnopqrstuvwxyz";
@@ -37,4 +45,31 @@ public class password {
             return "Débil";
         }
     }
-}
+
+
+    //ZONA DE LOS GET Y SET
+    public int getLogitud() {
+        return logitud;
+    }
+
+    public void setLogitud(int logitud) {
+        this.logitud = logitud;
+    }
+
+    public boolean isMayuscula() {
+        return mayuscula;
+    }
+
+    public void setMayuscula(boolean mayuscula) {
+        this.mayuscula = mayuscula;
+    }
+
+    public boolean isEspecial() {
+        return especial;
+    }
+
+    public void setEspecial(boolean especial) {
+        this.especial = especial;
+    }
+
+}// clase
