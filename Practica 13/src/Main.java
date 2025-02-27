@@ -1,71 +1,73 @@
 import javax.swing.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        vehiculo vehiculo = null;
+        conductores conductor = null;
+        envios envio = null;
+        entregas entrega = null;
 
-        vehiculo vehiculo = new vehiculo("ABCDE", "RAM", 100);
-        conductores conductores = new conductores();
-
-        //Menú de opciones
-        while (true){
-            String opcion = JOptionPane.showInputDialog(null, "Seleccione una opción:\n " +
-                    "1.- Registrar Vehiculo\n"+
-                    "2.- Registrar Conductor\n"+
-                    "3.- Registrar envio\n"+
-                    "4.- Registrar entrega\n"+
-                    "5.- Mostrar Información\n"+
-                    "6.- Salir");
-
-            switch (opcion){
-                case "1":
-                    String Vehiculo = JOptionPane.showInputDialog(null, "Ingrese la placa: ");
-                    vehiculo.setPlaca(Vehiculo);
-                    String modelo = JOptionPane.showInputDialog(null, "Ingrese la modelo: ");
-                    vehiculo.setModelo(modelo);
-                    String carga = JOptionPane.showInputDialog(null, "Ingrese la carga (kg): ");
-                    vehiculo.setCapacidadCarga(Integer.parseInt(carga));
+        int opcion;
+        do {
+            opcion = Integer.parseInt(JOptionPane.showInputDialog("Menú:\n1. Crear vehículo\n2. Crear conductor\n3. Asignar conductor a vehículo\n4. Crear envío\n5. Crear entrega\n6. Ver datos del vehículo\n7. Ver datos del conductor\n8. Ver datos del envío\n9. Actualizar estado de entrega\n10. Salir"));
+            switch (opcion) {
+                case 1:
+                    vehiculo = new vehiculo();
                     break;
-
-                case "2":
-                    String conductor = JOptionPane.showInputDialog(null, "Ingrese el Nombre Completo: ");
-                    conductores.setNombre(conductor);
-                    String identificador = JOptionPane.showInputDialog(null, "Ingrese alguna identificación: ");
-                    conductores.setIdentificación(identificador);
-                    String licencia = JOptionPane.showInputDialog(null, "Ingrese una licencia: ");
-                    conductores.setLicencia(licencia);
-
+                case 2:
+                    conductor = new conductores();
                     break;
-
-                case "3":
+                case 3:
+                    if (vehiculo != null && conductor != null) {
+                        vehiculo.asignarConductor(conductor);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe crear primero un vehículo y un conductor.");
+                    }
                     break;
-
-                case "4":
+                case 4:
+                    envio = envios.crearEnvio();
                     break;
-
-                case "5":
-                    JOptionPane.showMessageDialog(null,"Vehiculo registrado:\n"
-                            + "Placa: "+vehiculo.getPlaca()
-                            + "\nModelo: " + vehiculo.getModelo()
-                            + "\nCapacidad de Carga: " + vehiculo.getCapacidadCarga()
-
-                            + "------ CONDUCTOR REGISTRADO -------\n");
-                            ++ "Conductor: "+conductores.getNombre()
-                            + "\nIdentificación: "+ conductores.getIdentificación()
-                            + "\nLicencia: "+ conductores.getLicencia();
-
+                case 5:
+                    if (envio != null) {
+                        entrega = new entregas(JOptionPane.showInputDialog("Ingrese el número de guía de la entrega:"));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe crear un envío primero.");
+                    }
                     break;
-
-                case "6"://Salir
-                    JOptionPane.showMessageDialog(null, "Gracias por usar el Sistema... ");
-                    System.exit(0);
+                case 6:
+                    if (vehiculo != null) {
+                        JOptionPane.showMessageDialog(null, "Placa: " + vehiculo.getPlaca() + "\nModelo: " + vehiculo.getModelo() + "\nCapacidad de carga: " + vehiculo.getCapacidadCarga() + " kg");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay vehículo registrado.");
+                    }
                     break;
-
-                    default:
-                        JOptionPane.showMessageDialog(null, "Opción inválida. Por favor intente de nuevo ");
-
+                case 7:
+                    if (conductor != null) {
+                        JOptionPane.showMessageDialog(null, "Nombre: " + conductor.getNombre() + "\nIdentificación: " + conductor.getIdentificacion() + "\nLicencia: " + conductor.getLicencia());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay conductor registrado.");
+                    }
+                    break;
+                case 8:
+                    if (envio != null) {
+                        JOptionPane.showMessageDialog(null, "Código Envío: " + envio.getCodigoEnvio() + "\nDestino: " + envio.getDestino() + "\nPeso: " + envio.getPeso() + " kg");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay envío registrado.");
+                    }
+                    break;
+                case 9:
+                    if (entrega != null) {
+                        entrega.actualizarEstado();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay entrega registrada.");
+                    }
+                    break;
+                case 10:
+                    JOptionPane.showMessageDialog(null, "Saliendo del programa...");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción no válida.");
             }
-
-        }
-
+        } while (opcion != 10);
     }
 }

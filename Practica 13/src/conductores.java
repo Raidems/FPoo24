@@ -1,34 +1,16 @@
-public class conductores {
-
+import javax.swing.*;
+class conductores {
     private String nombre;
-    private String identificación;
+    private String identificacion;
     private String licencia;
 
-
-
-    //Zona de los get y set
-    public String getNombre() {
-        return nombre;
+    public conductores() {
+        this.nombre = JOptionPane.showInputDialog("Ingrese el nombre del conductor:");
+        this.identificacion = JOptionPane.showInputDialog("Ingrese la identificación del conductor:");
+        this.licencia = JOptionPane.showInputDialog("Ingrese el número de licencia del conductor:");
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getIdentificación() {
-        return identificación;
-    }
-
-    public void setIdentificación(String identificación) {
-        this.identificación = identificación;
-    }
-
-    public String getLicencia() {
-        return licencia;
-    }
-
-    public void setLicencia(String licencia) {
-        this.licencia = licencia;
-    }
-
-}// Llave de la clase
+    public String getNombre() { return nombre; }
+    public String getIdentificacion() { return identificacion; }
+    public String getLicencia() { return licencia; }
+}
