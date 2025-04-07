@@ -468,6 +468,23 @@ public class CRUD {
         return todo;
     }
     
+    // para poder actualizar el pedido
+    public boolean actualizarEstatusPedido(String idPedido, String nuevoEstatus) {
+    try {
+        String query = "UPDATE pedidos SET estatus = ? WHERE id_pedido = ?";
+        PreparedStatement ps = conexion.prepareStatement(query);
+        ps.setString(1, nuevoEstatus);
+        ps.setString(2, idPedido);
+
+        int filas = ps.executeUpdate();
+        return filas > 0;
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar estatus: " + e.getMessage());
+        return false;
+    }
+}
+
+    
     public ArrayList<String[]> obtenerTodos() {
         ArrayList<String[]> listaTodos = new ArrayList<>();
         try {

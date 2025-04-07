@@ -3,8 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package prma;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Font;
+
+import java.io.FileOutputStream;
 
 /**
  *
@@ -48,6 +64,8 @@ public class Pedidos extends javax.swing.JFrame {
         regre = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        actualizar = new javax.swing.JButton();
+        pdf = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +98,20 @@ public class Pedidos extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "En proceso", "Articulo no Disponible", "Disponible para Recolectar", "Entregado" }));
 
+        actualizar.setText("Actualizar");
+        actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarActionPerformed(evt);
+            }
+        });
+
+        pdf.setText("Descargar PDF");
+        pdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pdfActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -98,9 +130,15 @@ public class Pedidos extends javax.swing.JFrame {
                                 .addGap(93, 93, 93)
                                 .addComponent(jLabel2)
                                 .addGap(37, 37, 37)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 195, Short.MAX_VALUE)))
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(actualizar)))
+                        .addGap(0, 80, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(pdf)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,8 +151,11 @@ public class Pedidos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(regre)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(actualizar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(pdf)
+                .addGap(43, 43, 43))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,6 +178,97 @@ public class Pedidos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_regreActionPerformed
 
+    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = pedidosAdmin.getSelectedRow();
+
+    if (filaSeleccionada != -1) {
+        String idPedido = pedidosAdmin.getValueAt(filaSeleccionada, 0).toString(); // Columna 0: ID
+        String nuevoEstatus = jComboBox1.getSelectedItem().toString();
+
+        boolean actualizado = crud.actualizarEstatusPedido(idPedido, nuevoEstatus);
+
+        if (actualizado) {
+            JOptionPane.showMessageDialog(null, "Estatus actualizado correctamente.");
+            cargarPedidos(); // refresca la tabla
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el estatus.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Selecciona un pedido para actualizar su estatus.");
+    }
+    }//GEN-LAST:event_actualizarActionPerformed
+
+    
+    private void pdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfActionPerformed
+        // TODO add your handling code here:
+        generarPDF();
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream("reporte_pedidos.pdf"));
+            document.open();
+
+            // Título
+            Paragraph titulo = new Paragraph("Pedidos ordenados por departamento", 
+                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, Font.BOLD, BaseColor.BLACK));
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
+            document.add(Chunk.NEWLINE); // Espacio
+
+            // Tabla
+            PdfPTable tabla = new PdfPTable(modeloTabla.getColumnCount());
+            for (int i = 0; i < modeloTabla.getColumnCount(); i++) {
+                tabla.addCell(new PdfPCell(new Phrase(modeloTabla.getColumnName(i))));
+            }
+
+            for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                for (int j = 0; j < modeloTabla.getColumnCount(); j++) {
+                    tabla.addCell(modeloTabla.getValueAt(i, j).toString());
+                }
+            }
+
+            document.add(tabla);
+            document.close();
+
+            JOptionPane.showMessageDialog(null, "PDF generado correctamente.");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar el PDF.");
+        }
+    }//GEN-LAST:event_pdfActionPerformed
+    private void generarPDF() {
+        Document documento = new Document();
+        try {
+            PdfWriter.getInstance(documento, new FileOutputStream("reporte_pedidos.pdf"));
+            documento.open();
+            documento.add(new Paragraph("Reporte de Pedidos\n\n"));
+
+            PdfPTable tabla = new PdfPTable(pedidosAdmin.getColumnCount());
+
+            // Agregar encabezados
+            for (int i = 0; i < pedidosAdmin.getColumnCount(); i++) {
+                tabla.addCell(pedidosAdmin.getColumnName(i));
+            }
+
+            // Agregar filas
+            for (int i = 0; i < pedidosAdmin.getRowCount(); i++) {
+                for (int j = 0; j < pedidosAdmin.getColumnCount(); j++) {
+                    Object valor = pedidosAdmin.getValueAt(i, j);
+                    tabla.addCell(valor != null ? valor.toString() : "");
+                }
+            }
+
+            documento.add(tabla);
+            documento.close();
+
+            JOptionPane.showMessageDialog(this, "PDF generado exitosamente como 'reporte_pedidos.pdf'");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar el PDF");
+        }
+    
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -173,11 +305,13 @@ public class Pedidos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actualizar;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton pdf;
     private javax.swing.JTable pedidosAdmin;
     private javax.swing.JButton regre;
     // End of variables declaration//GEN-END:variables
